@@ -2,6 +2,14 @@ import { useState, useEffect} from "react"
 
 import { Routes,Route,Link} from 'react-router-dom'
 import { FaArrowDown, FaArrowUp } from "react-icons/fa"; 
+import toast from "react-hot-toast";
+import api from "../../utils/api";
+import { useNavigate } from 'react-router-dom';
+import uploadMedia from "../../utils/mediaUpload";
+import { MdClear } from "react-icons/md";
+import { PiBroomFill } from "react-icons/pi";
+import { MdOutlineSaveAlt } from "react-icons/md";
+
 
 export default function AdminAddProduct() {
    const [productId,setproductId]=useState("")
@@ -13,14 +21,110 @@ export default function AdminAddProduct() {
    const [image,setimage]=useState([])
    const [isAvailable,setisAvailable]=useState(true)
    const [ stock,setstock]=useState(0)
-   const [category,setcategory]=useState("")
+   const [category,setcategory]=useState("graphic card")
    const [brand,setbrand]=useState("") 
-   const [model,setmodel]=useState("")  
+   const [model,setmodel]=useState("") 
+   const [isLoading,setisLoading]=useState(false) 
+
+   const navigate = useNavigate()
+
+   
+        function clearForm() {
+    setproductId("")
+    setname("")
+    setaltNames("")
+    setprice("")
+    setlabelPrice("")
+    setdescription("")
+    setimage([])
+    setisAvailable(true)
+    setstock(0)
+    setcategory("graphic card")
+    setbrand("")
+    setmodel("")
+}
+
      
       async function addProduct() {
+
+
+        if (!productId || !name || !price || !description || image.length === 0) {
+        toast.error("Please fill all fields");
+        return; 
+    } 
+    const token = localStorage.getItem("Token")
+
+    if(token == null){
+        toast.error("You must be logged in to add a product")
+        navigate("/signin")
+        return
+    }
+
+const response = await api.get(`/products/${productId}`, {
+    headers: {
+        Authorization: "Bearer " + token
+    }
+})
+    
+   // const response = await api.get(`/products/${productId}`);
+    if (response.data) {
+        toast.error("This Product ID already exists.,Please enter a different one.");
+        return;
+    }
+        setisLoading(true)
         console.log("Save Button එක Click විය!");
+        //const token = localStorage.getItem("Token")
+    //if(token == null){
+        //toast.error("You must be logged in to add a product")
+       // navigate("/signin")
+       // return
+   // }
+
+
+        const imageUploadPromises=[]
+
         for(let i=0; i<image.length; i++){
-            console.log(image[i])
+            imageUploadPromises.push(uploadMedia(image[i]))
+            
+        }
+        try{
+            const imageUrls = await Promise.all(imageUploadPromises)
+            const altNamesArry = altNames.split(",")
+
+           const requestBody = {
+            productId : productId,
+            name : name,
+            altNames : altNamesArry ,
+            description: description,
+            price : Number(price),
+            labelPrice : Number(labelPrice),
+            image : imageUrls,
+            isAvailable : isAvailable,
+            category : category,
+            stock : Number(stock),
+            brand : brand,
+            model : model
+            }
+
+             await api.post("/products",requestBody,
+               {
+                headers : {
+                    "Authorization" : "Bearer " + token
+               } 
+            }
+              )
+              toast.success("Product added successfully")
+              console.log("Product added successfully")
+              setisLoading(false)
+              navigate("/admin/products")
+
+        }catch(error){
+            console.error("Error in creating product")
+            console.log(error)
+              setisLoading(false)
+              toast.error("Failed to add product. Please try again.")
+              toast.error(errorMessage)     
+
         }
         
       }
@@ -54,15 +158,26 @@ return(
             
                <h1 className="text-white ml-5 font-bold">Add New Product</h1>
             <div className="flex flex-row items-center gap-2 mr-5">
-            <Link to="/admin/products" className="ml-7 flex items-center justify-center px-4 py-1 text-sm font-medium text-white bg-red-600 rounded-full hover:bg-red-700 transition-all duration-300 shadow-md active:scale-95">Cancel</Link>
+            <Link to="/admin/products" className="ml-7 flex items-center justify-center px-4 py-1 text-sm font-medium text-white bg-red-600 rounded-full hover:bg-red-700 transition-all duration-300 shadow-md active:scale-95"><MdClear className="mr-2"/> Cancel</Link>
              {/*<button onClick={addProduct} className=" save-btn ml-2 flex items-center justify-center px-4 py-1 text-sm font-medium text-white bg-green-600 rounded-full hover:bg-red-700 transition-all duration-300 shadow-md active:scale-95 border-2 border-black save-black-glow ">Save</button>*/}
-            <button 
+            <button disabled={isLoading}
     type="button" 
     onClick={addProduct} 
     className="save-btn ml-2 flex items-center justify-center px-4 py-1 text-sm font-medium text-white bg-green-600 rounded-full hover:bg-red-700 transition-all duration-300 shadow-md active:scale-95 border-2 border-black save-black-glow flex items-center justify-center px-6 py-2 text-sm font-bold text-white bg-green-600 rounded-full hover:bg-green-700 transition-all duration-300 shadow-lg active:scale-95 border-2 border-black hover:shadow-green-500/50"
 >
-    SAVE  
+   <MdOutlineSaveAlt className="mr-2"/>  {isLoading ? "Saving..." : "Save"}
 </button>
+            </div>
+            <div><button
+    type="button"
+    onClick={clearForm}
+    className="active:scale-[2] active:translate-y-[2px] mr-7 ml-2 flex items-center justify-center px-4 py-1 text-sm font-medium text-white bg-yellow-600 rounded-full hover:bg-yellow-700 transition-all duration-300 shadow-md active:scale-95"
+>
+   <PiBroomFill className="mr-2"/>  Clear ALL
+</button>
+
+
+
             </div>
 
          </div>
@@ -151,7 +266,7 @@ Perfect for gamers, designers, and content creators.)"
                     <label className=" text-gray-300 text-sm font-semibold ml-1"> Select image</label>
                     <input multiple={true}
                         type="file"
-                        onChange={(e) =>setimage(e.target.files)}
+                        onChange={(e) =>setimage(Array.from(e.target.files))}
                         className="moving-border  hover:scale-105  focus:scale-[1.02] focus:outline-none focus:border-blue-500 shadow-md  text-sm w-full px-4 py-3 bg-[#041024] border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all "
                     
                     />
@@ -159,7 +274,7 @@ Perfect for gamers, designers, and content creators.)"
             <div>
                     
                     <label className="ml-[40px] text-gray-300 text-sm font-semibold ml-1">Available or UnAvailable</label>
-                    <select value={isAvailable}  onChange={(e)=>{setisAvailable(e.target.value)}} className=" ml-[50px] w-full h-[50px]  moving-border  hover:scale-105  focus:scale-[1.02] focus:outline-none focus:border-blue-500 shadow-md  text-sm w-full px-4 py-3 bg-[#041024] border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all  ">
+                    <select value={isAvailable}  onChange={(e)=>{setisAvailable(e.target.value === "true")}} className=" ml-[50px] w-full h-[50px]  moving-border  hover:scale-105  focus:scale-[1.02] focus:outline-none focus:border-blue-500 shadow-md  text-sm w-full px-4 py-3 bg-[#041024] border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all  ">
                          <option value={true} className="bg-[#041024] text-white">Available</option>
                          <option value={false} className="bg-[#041024]  text-white">unAvailable</option>
                     </select>
@@ -171,7 +286,7 @@ Perfect for gamers, designers, and content creators.)"
                         type="text"
                         value={stock}
                          placeholder="(10 )"
-                        onChange={(e) =>setstock(e.target.files)}
+                        onChange={(e) =>setstock(e.target. value)}
                         className="ml-[60px] moving-border  hover:scale-105  focus:scale-[1.02] focus:outline-none focus:border-blue-500 shadow-md  text-sm w-full px-4 py-3 bg-[#041024] border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all "
                     
                     />
@@ -220,7 +335,7 @@ Perfect for gamers, designers, and content creators.)"
                         type="text"
                         value={model}
                          placeholder="(RTX 5090 )"
-                        onChange={(e) =>setmodel(e.target.files)}
+                        onChange={(e) =>setmodel(e.target.value)}
                         className="ml=[100px] moving-border  hover:scale-105  focus:scale-[1.02] focus:outline-none focus:border-blue-500 shadow-md  text-sm w-full px-4 py-3 bg-[#041024] border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all "
                     
                     />

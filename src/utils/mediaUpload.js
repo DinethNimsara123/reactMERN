@@ -1,5 +1,6 @@
 import { createClient } from '@supabase/supabase-js'
 import { useState } from "react"
+import toast from 'react-hot-toast'
 
 
 const key = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9rcmRsYnFtaWt0bnpycWxhb3dyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgwODYzNDgsImV4cCI6MjA5MzY2MjM0OH0.7fOwFfXZDHI13JGMVxkyGlGdiWcFykMF8eWuM1AGPaI"
@@ -12,6 +13,9 @@ export default function uploadMedia (files) {
         (resolve,reject)=>{
             if(files == null){
                 reject("No files provided")
+                toast.error("No file was uploaded. Please upload a file and try again")
+
+
             }else{
                 const timestamp = new Date ().getTime()
                 const fileName = timestamp + "_"+ files.name
@@ -22,6 +26,7 @@ export default function uploadMedia (files) {
             resolve(publicUrl)
         }
     ).catch(
+        
         (error)=>{
              reject(error)
         }
