@@ -60,18 +60,24 @@ export default function AdminAddProduct() {
         return
     }
 
-const response = await api.get(`/products/${productId}`, {
-    headers: {
-        Authorization: "Bearer " + token
-    }
-})
+// ID එක පරීක්ෂා කිරීම Try-Catch එකක් ඇතුළත විය යුතුයි
+try {
+    const checkRes = await api.get(`/products/${productId}`, {
+        headers: { Authorization: "Bearer " + token }
+    });
     
-   // const response = await api.get(`/products/${productId}`);
-    if (response.data) {
-        toast.error("This Product ID already exists.,Please enter a different one.");
+    // මෙතනට ආවා කියන්නේ Backend එකේ ID එක තියෙනවා කියන එකයි
+    if (checkRes.data) {
+        toast.error("This Product ID already exists. Please enter a different one.");
         return;
     }
-        setisLoading(true)
+} catch (e) {
+    // 404 error එකක් ආවොත් ඒකෙන් අදහස් වෙන්නේ ID එක පාවිච්චි කරන්න පුළුවන් කියන එකයි.
+    // ඒ නිසා අපි loop එක දිගටම කරගෙන යනවා.
+    console.log("ID is available");
+}
+
+setisLoading(true); // මෙතන සිට පහළට ඔයාගේ ඉතිරි කෝඩ් එක තියෙන්න දෙන්න
         console.log("Save Button එක Click විය!");
         //const token = localStorage.getItem("Token")
     //if(token == null){
@@ -119,11 +125,11 @@ const response = await api.get(`/products/${productId}`, {
               navigate("/admin/products")
 
         }catch(error){
-            console.error("Error in creating product")
+            console.log("Error in creating product")
             console.log(error)
               setisLoading(false)
               toast.error("Failed to add product. Please try again.")
-              toast.error(errorMessage)     
+             toast.error(error.response?.data?.message || "Something went wrong")    
 
         }
         
