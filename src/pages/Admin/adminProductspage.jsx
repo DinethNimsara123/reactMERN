@@ -15,6 +15,8 @@ import {
 import ChartDataLabels from "chartjs-plugin-datalabels";
 import { Bar } from "react-chartjs-2";
 import toast from "react-hot-toast";
+import LoadingScreen from "../../Components/loadingScreen";
+import ProductDeleteButton from "../../Components/productDeleteButton";
 
 ChartJS.register(
   CategoryScale,
@@ -87,10 +89,13 @@ const sampleProducts = [
 export default function AdminProductspage() {
   const [products, setProducts] = useState([]);
   const[PRODUCTS,setPRODUCTS]=useState([])
+  const [loading, setLoading] = useState(true);
 
   //useEffect එකට දැම්මහම එක පාරක් පමණක් run වේ
   useEffect(() => {
-    const token = localStorage.getItem("Token"); 
+    if(loading) {
+
+           const token = localStorage.getItem("Token"); 
 
     api.get("/products", {
       headers: {
@@ -99,10 +104,14 @@ export default function AdminProductspage() {
     }).then((res) => {
       setPRODUCTS(res.data);
       setProducts(res.data); 
+      setLoading(false);
     }).catch(err => {
       console.error("දත්ත ලබාගැනීමේ දෝෂයක්:", err);
+      setLoading(false);
     });
-  }, []);
+    
+  }
+  }, [loading]);
 
   async function loadProducts() {
     try {
@@ -231,6 +240,9 @@ export default function AdminProductspage() {
 
   return (
     <div className="h-full w-full bg-[#041024] relative p-4">
+      {
+        loading && <LoadingScreen/>
+      }
       <div className="w-full max-w-[1400px] h-[520px] mx-auto bg-[#0d1b35] rounded-3xl p-6 shadow-2xl border border-blue-500">
         <h1 className="text-white text-3xl font-bold text-center mb-6">
           Product Summary Dashboard
@@ -289,7 +301,7 @@ export default function AdminProductspage() {
                   <td>
 
 
-                    <button 
+              {/*  <button 
   className="px-3 py-1 text-sm font-medium text-white bg-red-700 rounded hover:bg-red-500 transition"
   onClick={() => {
     const token = localStorage.getItem("Token");
@@ -305,6 +317,8 @@ export default function AdminProductspage() {
     .then((response) => {
       toast.dismiss(); // Loading එක අයින් කරනවා
       toast.success("Product deleted successfully");
+       console.log("Product deleted successfully");
+      setLoading(true); // Products නැවත load කරනවා
       
       // UI එකෙන් අදාළ product එක අයින් කරනවා (මෙතන වරහන් හරියට බලන්න)
       setPRODUCTS(PRODUCTS.filter((p) => p._id !== PRODUCT._id));
@@ -318,9 +332,9 @@ export default function AdminProductspage() {
   }}
 >
   Delete
-</button>
+</button>*/}
 
-
+<ProductDeleteButton productId={PRODUCT.productId} refresh={()=>setLoading(true)} />
 
                   </td>
                 </tr>
