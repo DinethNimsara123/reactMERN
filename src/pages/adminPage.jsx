@@ -5,6 +5,7 @@ import { FcManager } from "react-icons/fc";
 import AdminProductspage from './admin/adminProductspage';
 import AdminAddProduct from './admin/adminAddproduct';
 import { NavLink,useLocation} from 'react-router-dom';
+import AdminEditeProduct from './Admin/adminEditeProductForm';
 
 
 
@@ -42,11 +43,11 @@ return(
 
             
             {/*<Link className=' active:bg-red-700 w-[200px] h-[50px] bg-blue-600 my-5 mx-5 flex items-center justify-center text-white' to="/admin/products"><FcAddDatabase className='text-5xl'/>Products Page</Link>*/}
-{/* Products Page Button - මෙන්න මෙතන තමයි ප්‍රධාන වෙනස */}
+
         <Link 
           to="/admin/products" 
           className={`relative w-[200px] h-[50px] my-5 mx-5 flex items-center justify-center text-white transition-all duration-300 active:bg-red-700 shadow-md rounded-lg ${
-            isProductsActive // අප සෑදූ අලුත් variable එක මෙතනට දැම්මා
+            isProductsActive 
               ? "bg-blue-700 border-2 border-white scale-110 active-arrow z-10" 
               : "bg-blue-600 border-2 border-transparent scale-100 hover:bg-blue-500"
           }`}
@@ -81,6 +82,8 @@ return(
                   <Route path="/products" element={<AdminProductspage/>}/>
                    <Route path="/users" element={<h1>Users Page</h1>}/>
                    <Route path='/add-product' element = {<AdminAddProduct />}/>
+                    <Route path='/edit-product' element = {<AdminEditeProduct />}/>
+                 
                  
                </Routes>
 

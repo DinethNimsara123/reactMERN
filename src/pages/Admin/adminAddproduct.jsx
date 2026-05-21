@@ -301,17 +301,17 @@ Perfect for gamers, designers, and content creators.)"
                 
                     <label className="ml-[100px] text-gray-300 text-sm font-semibold ml-1">Category</label>
                     <select   value={category}  onChange={(e)=>{setcategory(e.target.value)}} className=" ml-[100px] w-full h-[50px]  moving-border  hover:scale-105  focus:scale-[1.02] focus:outline-none focus:border-blue-500 shadow-md  text-sm w-full px-4 py-3 bg-[#041024] border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all  ">
-                         <option value="graphic card"className="bg-[#041024] text-white">graphic card</option>
-                         <option value="motherboard" className="bg-[#041024]  text-white">motherboard</option>
-                         <option value="cpu" className="bg-[#041024]  text-white">cpu</option>
-                         <option value="ram" className="bg-[#041024]  text-white">ram</option>
-                         <option value="storage" className="bg-[#041024]  text-white">storage</option>
-                         <option value="power supply" className="bg-[#041024]  text-white">power supply</option>
-                         <option value="caseing" className="bg-[#041024]  text-white">caseing</option>
-                         <option value="cooling fan" className="bg-[#041024]  text-white">cooling fan</option>
-                         <option value="key boards" className="bg-[#041024]  text-white">key boards</option>
-                         <option value="mouse" className="bg-[#041024]  text-white">mouse</option>
-                        <option value="laptop" className="bg-[#041024]  text-white">laptop</option>
+                         <option value="Graphic card"className="bg-[#041024] text-white">Graphic card</option>
+                         <option value="Motherboard" className="bg-[#041024]  text-white">Motherboard</option>
+                         <option value="Cpu" className="bg-[#041024]  text-white">Cpu</option>
+                         <option value="Ram" className="bg-[#041024]  text-white">Ram</option>
+                         <option value="Storage" className="bg-[#041024]  text-white">Storage</option>
+                         <option value="Power supply" className="bg-[#041024]  text-white">Power supply</option>
+                         <option value="Caseing" className="bg-[#041024]  text-white">Caseing</option>
+                         <option value="Cooling fan" className="bg-[#041024]  text-white">Cooling fan</option>
+                         <option value="Key boards" className="bg-[#041024]  text-white">Key boards</option>
+                         <option value="Mouse" className="bg-[#041024]  text-white">Mouse</option>
+                        <option value="Laptop" className="bg-[#041024]  text-white">Laptop</option>
                         <option value="Monitors" className="bg-[#041024]  text-white">Monitors</option>
                          <option value="Chairs" className="bg-[#041024]  text-white">Chairs</option>
                          <option value="Tables" className="bg-[#041024]  text-white">Tables</option>
@@ -319,7 +319,7 @@ Perfect for gamers, designers, and content creators.)"
                           <option value="Mobiles" className="bg-[#041024]  text-white">Mobiles</option>
                           <option value="Consoles" className="bg-[#041024]  text-white">Consoles</option>
                           <option value="Tablet PC (Tabs)" className="bg-[#041024]  text-white">Tablet PC (Tabs)</option>
-                          <option value="others" className="bg-[#041024]  text-white">others</option>
+                          <option value="Others" className="bg-[#041024]  text-white">Others</option>
                     </select>
             </div>
         

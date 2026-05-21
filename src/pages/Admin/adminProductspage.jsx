@@ -2,6 +2,7 @@ import { AiOutlinePlus } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import api from "../../utils/api";
+import { FaPen } from "react-icons/fa";
 
 import {
   Chart as ChartJS,
@@ -259,7 +260,7 @@ export default function AdminProductspage() {
         <thead>
           
           <tr className="border-b border-gray-800 bg-[#051124]">
-             <th className="p-4 text-[11px] font-bold uppercase tracking-wider text-[#f4f4f4]">-</th>
+             <th className="p-4 text-[11px] font-bold uppercase tracking-wider text-[#f4f4f4]">Image</th>
             <th className="p-4 text-[11px] font-bold uppercase tracking-wider text-[#f4f4f4]">Product ID</th>
             <th className="p-4 text-[11px] font-bold uppercase tracking-wider text-[#f4f4f4]">Name</th>
             <th className="p-4 text-[11px] font-bold uppercase tracking-wider text-[#f4f4f4]">Price</th>
@@ -333,9 +334,13 @@ export default function AdminProductspage() {
 >
   Delete
 </button>*/}
-
-<ProductDeleteButton productId={PRODUCT.productId} refresh={()=>setLoading(true)} />
-
+<div className="flex justify-between">
+<Link
+   to="/admin/edit-product" state={PRODUCT}
+   className=""><FaPen className="text-sm mt-3 ml-5 hover:text-blue-500 "/>
+   </Link>
+<ProductDeleteButton  productId={PRODUCT.productId} refresh={()=>setLoading(true)} />
+</div>
                   </td>
                 </tr>
               } 
