@@ -65,3 +65,32 @@
 .animate-bounce-slow {
   animation: bounce-slow 1.5s infinite;
 }
+
+
+
+
+/* ==========================================================
+   ✨ CUSTOM GRADIENT SCROLLBAR FOR DN STORE ✨
+   ========================================================== */
+
+/* 1. මුළු Scrollbar එකේම පළල (Width) */
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+/* 2. Scrollbar එක දිවෙන පසුබිම (Track) - සයිට් එකේ Background එකට ගැලපෙන්න කළු කලා */
+::-webkit-scrollbar-track {
+  background: #000000;
+}
+
+/* 3. උඩ පහළ යන බටන් එක (Thumb) - නිල් පාට සිට කොළ පාටට Gradient එක */
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, #3b82f6, #10b981);
+  border-radius: 10px; /* රවුම් හැඩය */
+  border: 2px solid #000000; /* Track එකෙන් වෙන් වෙලා කැපිලා පේන්න වටේට කළු Border එකක් */
+}
+
+/* 4. මවුස් එක Scrollbar එක උඩට ගෙනිච්චාම (Hover) පාට තව ටිකක් බ්‍රයිට් වෙන්න */
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(to bottom, #2b75f3, #059669);
+}

@@ -106,3 +106,32 @@
   0% { opacity: 0; right: -5px; }
   100% { opacity: 1; right: -15px; }
 }
+
+
+
+
+
+/* 🌐 මුළු වෙබ් පේජ් එකේම Scrollbar එක CSS වලින් හැඩ කිරීම */
+
+/* 1. මුළු Scrollbar එකේම පළල (Width) තීරණය කිරීම */
+::-webkit-scrollbar {
+  width: 14px;
+}
+
+/* 2. Scrollbar එක දුවන පසුබිම (Track) - මේක සයිට් එකේ Background එකට ගැලපෙන්න කළු/තද නිල් කරනවා */
+::-webkit-scrollbar-track {
+  background: #000000; 
+  border-left: 1px solid rgba(255, 255, 255, 0.05); /* සියුම් Border එකක් */
+}
+
+/* 3. උඩ පහළ යන බටන් එක (Thumb) - මේකට තමයි ඔයාගේ ලස්සන Gradient එක දෙන්නේ */
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, #3b82f6, #10b981); /* උඩ නිල් පාට සිට පහළ කොළ පාටට (Blue to Emerald) */
+  border-radius: 20px; /* රවුම් හැඩය ගන්න */
+  border: 3px solid #000000; /* Track එකයි Thumb එකයි වෙන් වෙලා ලස්සනට පේන්න වටේට තියෙන කළු Border එක */
+}
+
+/* 4. මවුස් එක Scrollbar එක උඩට ගෙනිච්චාම (Hover) පාට ටිකක් තද වෙන්න */
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(to bottom, #2563eb, #059669);
+}
