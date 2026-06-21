@@ -8,7 +8,7 @@ import RejisterPage from './pages/rejisterPage'
 import AdminPage from './pages/adminPage'
 import TestPage from './pages/test'
 import { Toaster } from 'react-hot-toast'
-
+import CartPage from "./pages/CartPage";
 
 
 
@@ -32,6 +32,7 @@ function App() {
              <Route path='/signup' element = {<RejisterPage/>}/>
              <Route path='/admin/*' element = {<AdminPage/>}/>
               <Route path='/test' element = {<TestPage />}/>
+              <Route path="/cart" element={<CartPage />} />
                
                
       </Routes>
