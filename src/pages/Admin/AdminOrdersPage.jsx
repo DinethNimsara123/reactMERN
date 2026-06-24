@@ -1,6 +1,10 @@
 import { useEffect, useState } from "react";
 import api from "../../utils/api";
-import { FaChevronDown, FaChevronUp, FaPhone, FaMapMarkerAlt, FaUser, FaTrashAlt, FaExclamationTriangle, FaCheckSquare, FaSquare } from "react-icons/fa";
+import { 
+  FaChevronDown, FaChevronUp, FaPhone, FaMapMarkerAlt, FaUser, 
+  FaTrashAlt, FaExclamationTriangle, FaCheckSquare, FaSquare,
+  FaCommentDots // <- මැසේජ් පැනල් එක ඕපන් කරන්න අලුතින් අයිකන් එකක් ගත්තා
+} from "react-icons/fa";
 
 import {
   Chart as ChartJS,
@@ -40,6 +44,11 @@ export default function AdminOrdersPage() {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [orderToDelete, setOrderToDelete] = useState(null);
 
+  // 💬 Message Modal States (අලුතින් එකතු කළා)
+  const [showMsgModal, setShowMsgModal] = useState(false);
+  const [selectedOrderForMsg, setSelectedOrderForMsg] = useState(null);
+  const [typedMessage, setTypedMessage] = useState("");
+
   useEffect(() => {
     if (loading) {
       const token = localStorage.getItem("Token");
@@ -58,6 +67,7 @@ export default function AdminOrdersPage() {
       .catch((err) => {
         console.error("Error fetching orders:", err);
         toast.error("Failed to load orders");
+        loading(false);
         setLoading(false);
       });
     }
@@ -122,14 +132,12 @@ export default function AdminOrdersPage() {
     },
   };
 
-  // --- ⚡ STATUS UPDATE FUNCTION (🎯 FIXED TO MATCH SIR'S BACKEND) ---
+  // --- ⚡ STATUS UPDATE FUNCTION ---
   const handleStatusChange = async (orderId, newStatus) => {
-    // loading toast එකක් දානවා වැඩේ වෙනකල්
     const toastId = toast.loading("Updating status in database...");
     try {
       const token = localStorage.getItem("Token");
 
-      // 1. ලිස්ට් එකෙන් අදාල ඕඩර් එක අරන් ඒකේ තියෙන custom 'orderId' එක ගන්නවා
       const targetOrder = orders.find(o => o._id === orderId);
       const backendOrderId = targetOrder?.orderId;
 
@@ -138,14 +146,12 @@ export default function AdminOrdersPage() {
         return;
       }
 
-      // 2. සර්ගේ Backend Route එකට API Call එක යවනවා (Status එක lowercase කරලා)
       await api.put(`/orders/update-status/${backendOrderId}`, { 
         status: newStatus.toLowerCase() 
       }, {
         headers: { Authorization: "Bearer " + token }
       });
 
-      // 3. Frontend එකේ state එක update කරනවා (එතකොට Chart එකත් auto මාරු වෙනවා)
       setOrders(prevOrders => 
         prevOrders.map(order => 
           order._id === orderId ? { ...order, status: newStatus.toLowerCase() } : order
@@ -155,9 +161,53 @@ export default function AdminOrdersPage() {
       toast.success(`Status updated to ${newStatus.toUpperCase()}!`, { id: toastId });
     } catch (err) {
       console.error("Backend update error:", err);
-      // සර්ගේ backend එකෙන් ආපු error message එකක් තියේනම් ඒක පෙන්වනවා
       const errorMsg = err.response?.data?.message || "Error updating status. Check Admin permissions!";
       toast.error(errorMsg, { id: toastId });
+    }
+  };
+
+  // --- 💬 OPEN MESSAGE POP-UP MODAL ---
+  const triggerMessageModal = (order, e) => {
+    e.stopPropagation(); // Row එක expand වෙන එක නවත්තන්න
+    setSelectedOrderForMsg(order);
+    setTypedMessage(order.adminMessage || ""); // කලින් ඩේටාබේස් එකේ මැසේජ් එකක් තිබ්බොත් ඒක බොක්ස් එකට ගන්නවා
+    setShowMsgModal(true);
+  };
+
+  // --- 💬 SAVE / UPDATE / DELETE MESSAGE IN DATABASE ---
+  const handleSaveMessage = async () => {
+    if (!selectedOrderForMsg) return;
+
+    const toastId = toast.loading("Saving message to database...");
+    try {
+      const token = localStorage.getItem("Token");
+      const backendOrderId = selectedOrderForMsg.orderId;
+
+      if (!backendOrderId) {
+        toast.error("Order Custom ID not found!", { id: toastId });
+        return;
+      }
+
+      // අපි අලුතින් හදපු වෙනම PUT Route එකට රික්වෙස්ට් එක යවනවා
+      await api.put(`/orders/update-message/${backendOrderId}`, {
+        adminMessage: typedMessage // ටෙක්ස්ට් එක හිස් කරලා යැව්වොත් Backend එකෙන් auto ඩිලීට් වෙනවා
+      }, {
+        headers: { Authorization: "Bearer " + token }
+      });
+
+      // Frontend state එක අප්ඩේට් කරනවා (ලිස්ට් එකට අලුත් මැසේජ් එක දානවා)
+      setOrders(prevOrders =>
+        prevOrders.map(order =>
+          order._id === selectedOrderForMsg._id ? { ...order, adminMessage: typedMessage } : order
+        )
+      );
+
+      toast.success(typedMessage === "" ? "Message deleted!" : "Message updated successfully!", { id: toastId });
+      setShowMsgModal(false);
+      setSelectedOrderForMsg(null);
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to save message", { id: toastId });
     }
   };
 
@@ -298,11 +348,11 @@ export default function AdminOrdersPage() {
                   </div>
                   
                   {/* Actions Area */}
-                  <div className="col-span-2 flex items-center justify-center gap-3 px-2" onClick={(e) => e.stopPropagation()}>
+                  <div className="col-span-2 flex items-center justify-center gap-2 px-1" onClick={(e) => e.stopPropagation()}>
                     <select
                       value={currentStatus}
                       onChange={(e) => handleStatusChange(order._id, e.target.value)}
-                      className={`bg-[#0a1f44] text-[11px] font-bold p-2 rounded border outline-none cursor-pointer w-32 text-center transition-all ${
+                      className={`bg-[#0a1f44] text-[11px] font-bold p-2 rounded border outline-none cursor-pointer w-24 text-center transition-all ${
                         currentStatus === "delivered" ? "text-green-400 border-green-900" : currentStatus === "shipping" ? "text-blue-400 border-blue-900" : "text-amber-400 border-amber-900"
                       }`}
                     >
@@ -310,6 +360,17 @@ export default function AdminOrdersPage() {
                       <option value="shipping" className="text-blue-400 bg-[#041024]">Shipping</option>
                       <option value="delivered" className="text-green-400 bg-[#041024]">Delivered</option>
                     </select>
+
+                    {/* 💬 MESSAGE BUTTON (අලුතින් එකතු කළා) */}
+                    <button
+                      onClick={(e) => triggerMessageModal(order, e)}
+                      className={`p-2 rounded bg-gray-800/20 hover:bg-blue-500/10 transition-all border flex items-center justify-center ${
+                        order.adminMessage ? "text-amber-400 border-amber-500/40" : "text-gray-400 border-gray-800 hover:border-blue-500/30"
+                      }`}
+                      title={order.adminMessage ? "Edit / Delete Note" : "Add Store Note"}
+                    >
+                      <FaCommentDots size={14} />
+                    </button>
 
                     <button 
                       onClick={() => triggerDeleteConfirm(order._id)}
@@ -356,10 +417,17 @@ export default function AdminOrdersPage() {
                           <h3 className="text-green-400 font-bold mb-3 flex items-center gap-2 border-b border-gray-800 pb-2 text-xs uppercase tracking-wider">
                             Payment Summary
                           </h3>
-                          <div className="mt-2">
-                            <span className="text-[11px] font-bold bg-amber-600/20 text-amber-400 px-2 py-1 rounded border border-amber-600/30">
+                          <div className="mt-2 flex flex-col gap-2">
+                            <span className="w-max text-[11px] font-bold bg-amber-600/20 text-amber-400 px-2 py-1 rounded border border-amber-600/30">
                               Cash On Delivery (COD)
                             </span>
+                            {/* DB එකේ දැනට මැසේජ් එකක් තියේනම් ඒක Expanded view එකෙත් ලස්සනට පේන්න දැම්මා */}
+                            {order.adminMessage && (
+                              <div className="text-xs text-amber-300 bg-amber-500/5 p-2 rounded border border-amber-500/20 font-mono mt-1">
+                                <span className="text-[10px] text-amber-500 font-bold block">STORE NOTE:</span>
+                                {order.adminMessage}
+                              </div>
+                            )}
                           </div>
                         </div>
                         <div className="mt-4 pt-3 border-t border-gray-800/60 flex justify-between items-end">
@@ -411,6 +479,47 @@ export default function AdminOrdersPage() {
         </div>
 
       </div>
+
+      {/* 💬 POP-UP MESSAGE MODAL (අලුතින් එකතු කළා) */}
+      {showMsgModal && selectedOrderForMsg && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-[9999]">
+          <div className="bg-[#0b1b35] border border-blue-500/40 w-full max-w-lg rounded-2xl p-6 shadow-[0_0_30px_rgba(59,130,246,0.2)]">
+            <h2 className="text-white text-lg font-bold mb-1 flex items-center gap-2">
+              <FaCommentDots className="text-blue-400" /> Order Custom Note
+            </h2>
+            <p className="text-gray-400 text-xs mb-4">
+              Order ID: <span className="font-mono text-blue-400 font-bold">#{selectedOrderForMsg.orderId}</span> ({selectedOrderForMsg.firstName} {selectedOrderForMsg.lastName})
+            </p>
+
+            {/* මැසේජ් එක ලියන Textarea එක */}
+            <textarea
+              value={typedMessage}
+              onChange={(e) => setTypedMessage(e.target.value)}
+              placeholder="Ex: Tracking: DOMEX1294. Dispatched via Domex Courier. Delivered within 2 days."
+              className="w-full h-32 bg-[#041024] border border-gray-800 rounded-xl p-3 text-white text-sm outline-none focus:border-blue-500 transition-all resize-none placeholder:text-gray-600"
+            />
+
+            <p className="text-[11px] text-gray-500 text-left mt-1">
+              * Note: If you want to delete the message, just clear the text box and click save.
+            </p>
+
+            <div className="flex gap-3 justify-end mt-6">
+              <button
+                onClick={() => { setShowMsgModal(false); setSelectedOrderForMsg(null); }}
+                className="px-4 py-2 rounded-xl bg-gray-800 text-gray-300 hover:bg-gray-700 font-semibold transition-all border border-gray-700 text-xs"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleSaveMessage}
+                className="px-4 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-500 shadow-lg shadow-blue-600/20 font-semibold transition-all text-xs"
+              >
+                Save & Sync Node
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* 🚨 CUSTOM DELETE MODAL */}
       {showDeleteModal && (
