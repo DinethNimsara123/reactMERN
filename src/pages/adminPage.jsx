@@ -6,7 +6,7 @@ import AdminProductspage from './admin/adminProductspage';
 import AdminAddProduct from './admin/adminAddproduct';
 import { NavLink,useLocation} from 'react-router-dom';
 import AdminEditeProduct from './Admin/adminEditeProductForm';
-
+import AdminOrdersPage from './admin/adminOrdersPage';
 
 
 export default function AdminPage () {
@@ -78,7 +78,7 @@ return(
           </div>
           <div id="admin-content-area" className="flex-1 h-screen overflow-y-auto bg-[#041024] text-2xl text-amber-50 p-5 custom-scrollbar ">
                <Routes>
-                 <Route path="/" element={<h1>Order Page</h1>}/>
+                <Route path="/" element={<AdminOrdersPage />} />
                   <Route path="/products" element={<AdminProductspage/>}/>
                    <Route path="/users" element={<h1>Users Page</h1>}/>
                    <Route path='/add-product' element = {<AdminAddProduct />}/>
