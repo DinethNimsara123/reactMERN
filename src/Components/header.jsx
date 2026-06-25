@@ -1,5 +1,5 @@
 import { Link, NavLink } from "react-router-dom"; // ⚠️ NavLink එක මෙතනට එකතු කළා
-
+import UserData from "./userData";
 export default function Header() {
     
 
@@ -48,7 +48,9 @@ export default function Header() {
                 >
                     <h1 className="text-white text-2xl font-bold">About Us</h1>
                 </NavLink>
-
+                <div className="ml-50 mt-5 ">
+                        <UserData/>
+                </div>
             </div>
         </div>
     );
