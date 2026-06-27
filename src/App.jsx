@@ -10,9 +10,17 @@ import { Toaster } from 'react-hot-toast'
 import CartPage from "./pages/CartPage";
 import MyOrders from "./components/MyOrders";
 import AdminRoute from "./Components/AdminRouteCheck";
+import SettingsPage from "./pages/SettingsPage";
+import { GoogleOAuthProvider } from '@react-oauth/google';
+import AboutUs from './pages/AboutUs';
+import ContactUs from './pages/ContactUs';
+
+//211593988065-1bfp9ira0ulm4e1bcd6ri3lihes6l6gs.apps.googleusercontent.com
+
 
 function App() {
   return(
+    <GoogleOAuthProvider clientId="211593988065-1bfp9ira0ulm4e1bcd6ri3lihes6l6gs.apps.googleusercontent.com">
       
      <div className='w-full h-screen '>
       <Toaster
@@ -31,14 +39,16 @@ function App() {
                     <AdminPage/>
                 </AdminRoute>
              }/>
-
+              <Route path='/settings' element={<SettingsPage />} />
               <Route path='/test' element = {<TestPage />}/>
               <Route path="/cart" element={<CartPage />} />
               <Route path="/my-orders" element={<MyOrders />} />
+              <Route path="/about-us" element={<AboutUs />} />
+              <Route path="/contact-us" element={<ContactUs />} />
       </Routes>
       
      </div>
-      
+    </GoogleOAuthProvider>
   )
 }
 
