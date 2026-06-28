@@ -8,6 +8,8 @@ import uploadMedia from "../utils/mediaUpload"; // 👈 උඹේ Supabase Uploa
 import { FaChevronLeft, FaChevronRight, FaShippingFast, FaTag, FaLaptop, FaCog, FaSave, FaCloudUploadAlt, FaSpinner } from "react-icons/fa";
 import { toast } from "react-hot-toast";
 import Footer from "../Components/footer";
+import ContactUs from "./contactUs";
+import AboutUs from "./AboutUs";
 
 export default function HomePage() {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -246,8 +248,8 @@ export default function HomePage() {
 
           {/* 📦 අනිත් සාමාන්‍ය රූට්ස් ටික එහෙම්මම තියෙනවා */}
           <Route path="/products" element={<ProductsPage />} />
-          <Route path="/contact-us" element={<h1 className="text-white text-3xl font-bold p-5">Contact Us page</h1>} />
-          <Route path="/about-us" element={<h1 className="text-white text-3xl font-bold p-5">About Us page</h1>} />
+          <Route path="/contact-us" element={<ContactUs />} />
+          <Route path="/about-us" element={<AboutUs />} />
           <Route path="/overview/:productId" element={<ProductOverview />} />
           <Route path="/*" element={<h1 className="text-white text-3xl font-bold p-5">404 Not Found page</h1>} />
         </Routes>

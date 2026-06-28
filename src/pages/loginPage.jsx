@@ -7,8 +7,6 @@ import api from "../utils/api";
 import toast from "react-hot-toast";
 import { useGoogleLogin } from "@react-oauth/google";
 
-
-
 export default function LoginPage(){
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -116,6 +114,7 @@ export default function LoginPage(){
                     </div>
                 </div>
 
+                {/* 👉 Forgot Password လින්ක් එක /forget-password ලෙස නිවැරදිව යොමු කර ඇත */}
                 <p className="text-white font-light text-xs mt-2">Forget your password? click <Link to="/forget-password" className="underline text-blue-400 ml-1">Here</Link> </p>
                 
                 <div>
@@ -124,10 +123,9 @@ export default function LoginPage(){
                     </button> 
                 </div>
 
-                {/* 👈 Register Page එකට යන ලින්ක් එක /signup ලෙස නිවැරදිව යොමු කර ඇත */}
                 <p className="text-white font-light text-xs mt-4">Don't have an account? click <Link to="/signup" className="underline text-blue-400 ml-1">Register Here</Link> </p>
                 
-                <button type="button" onClick={googleLogin  } className="w-full h-[50px] bg-white text-black rounded-xl mt-6 active:bg-amber-100 transition flex justify-center items-center cursor-pointer text-xs font-semibold">
+                <button type="button" onClick={googleLogin} className="w-full h-[50px] bg-white text-black rounded-xl mt-6 active:bg-amber-100 transition flex justify-center items-center cursor-pointer text-xs font-semibold">
                     <FcGoogle className="mr-2 text-2xl" /> Sign In With Google
                 </button>
             </form> 

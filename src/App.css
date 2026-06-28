@@ -140,7 +140,7 @@
 
 
 /* Rotating Border Animation සඳහා */
-@keyframes rotate-border {
+/*@keyframes rotate-border {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
@@ -165,4 +165,4 @@
 .animate-glow-border > div {
   position: relative;
   z-index: 1;
-}
+}*/

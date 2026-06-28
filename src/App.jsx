@@ -14,6 +14,8 @@ import SettingsPage from "./pages/SettingsPage";
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import AboutUs from './pages/AboutUs';
 import ContactUs from './pages/ContactUs';
+import ForgotPassword from './pages/ForgotPassword';
+import ResetPassword from './pages/ResetPassword';
 
 //211593988065-1bfp9ira0ulm4e1bcd6ri3lihes6l6gs.apps.googleusercontent.com
 
@@ -43,8 +45,9 @@ function App() {
               <Route path='/test' element = {<TestPage />}/>
               <Route path="/cart" element={<CartPage />} />
               <Route path="/my-orders" element={<MyOrders />} />
-              <Route path="/about-us" element={<AboutUs />} />
-              <Route path="/contact-us" element={<ContactUs />} />
+              
+               <Route path="/forget-password" element={<ForgotPassword />} />
+               <Route path="/reset-password" element={<ResetPassword />} />
       </Routes>
       
      </div>

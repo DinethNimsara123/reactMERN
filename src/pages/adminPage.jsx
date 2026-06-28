@@ -7,7 +7,7 @@ import AdminAddProduct from './admin/adminAddproduct';
 import { NavLink,useLocation} from 'react-router-dom';
 import AdminEditeProduct from './Admin/adminEditeProductForm';
 import AdminOrdersPage from './admin/adminOrdersPage';
-
+import UsersPage from './admin/usersPage';
 
 export default function AdminPage () {
     const location = useLocation();
@@ -80,9 +80,10 @@ return(
                <Routes>
                 <Route path="/" element={<AdminOrdersPage />} />
                   <Route path="/products" element={<AdminProductspage/>}/>
-                   <Route path="/users" element={<h1>Users Page</h1>}/>
+                   
                    <Route path='/add-product' element = {<AdminAddProduct />}/>
                     <Route path='/edit-product' element = {<AdminEditeProduct />}/>
+                    <Route path="/users" element={<UsersPage />} />
                  
                  
                </Routes>
