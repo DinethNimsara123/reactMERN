@@ -11,19 +11,16 @@ export default function SettingsPage() {
     const [imageFile, setImageFile] = useState(null); 
     const [imagePreview, setImagePreview] = useState("/default-profile.png"); 
     
-    // Password visibility states වෙන වෙනම පාලනය කිරීම
     const [showOldPassword, setShowOldPassword] = useState(false);
     const [showNewPassword, setShowNewPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     
-    // Profile Data State
     const [formData, setFormData] = useState({
         firstName: "",
         lastName: "",
         email: ""
     });
     
-    // Password State (පරණ, අලුත් සහ confirm password සඳහා)
     const [passwordData, setPasswordData] = useState({
         oldPassword: "",
         newPassword: "",
@@ -35,7 +32,6 @@ export default function SettingsPage() {
         isEmailVerified: false
     });
 
-    // 1. පේජ් එක ලෝඩ් වෙද්දී යූසර් විස්තර ඇද ගැනීම
     useEffect(() => {
         const token = localStorage.getItem("Token");
         if (token) {
@@ -71,7 +67,6 @@ export default function SettingsPage() {
         setPasswordData({ ...passwordData, [e.target.name]: e.target.value });
     };
 
-    // 2. ෆොටෝ preview එක වෙනස් කිරීම
     const handleImageChange = (e) => {
         const file = e.target.files[0];
         if (file) {
@@ -80,7 +75,6 @@ export default function SettingsPage() {
         }
     };
 
-    // 3. Profile Details සුරැකීම (නම, ඊමේල්, ෆොටෝ)
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
@@ -117,7 +111,6 @@ export default function SettingsPage() {
         }
     };
 
-    // 4. Password වෙනස් කිරීමේ ක්‍රියාවලිය (Backend Verification)
     const handlePasswordSubmit = async (e) => {
         e.preventDefault();
         
@@ -154,8 +147,6 @@ export default function SettingsPage() {
 
     return (
         <div className="min-h-screen bg-[#030712] text-white pt-28 pb-12 px-4 sm:px-8 font-sans bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-950/20 via-black to-black">
-            
-            {/* Grid Layout එක: වම් පැත්තට Profile සහ දකුණු පැත්තට Password කොටුව */}
             <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
                 
                 {/* 👤 වම් පැත්තේ Profile Details Form */}
@@ -234,7 +225,7 @@ export default function SettingsPage() {
                     </form>
                 </div>
 
-                {/* 🔐 දකුණු පැත්තේ Change Password Form (ඇස් ලාංඡන සහිතයි) */}
+                {/* 🔐 දකුණු පැත්තේ Change Password Form */}
                 <div className="lg:col-span-5 bg-[#111827]/40 backdrop-blur-xl border border-gray-800/80 p-6 sm:p-10 rounded-3xl shadow-[0_0_50px_rgba(0,0,0,0.8)] relative overflow-hidden">
                     <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-amber-500 to-transparent"></div>
                     
