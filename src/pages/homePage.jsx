@@ -9,7 +9,8 @@ import { FaChevronLeft, FaChevronRight, FaShippingFast, FaTag, FaLaptop, FaCog, 
 import { toast } from "react-hot-toast";
 import Footer from "../Components/footer";
 import ContactUs from "./contactUs";
-import AboutUs from "./AboutUs";
+import AboutUs from "./aboutUs";
+
 
 export default function HomePage() {
   const [currentSlide, setCurrentSlide] = useState(0);
