@@ -6,8 +6,8 @@ import AdminProductspage from './Admin/adminProductspage';
 import AdminAddProduct from './Admin/adminAddproduct';
 import { NavLink,useLocation} from 'react-router-dom';
 import AdminEditeProduct from './Admin/adminEditeProductForm';
-import AdminOrdersPage from './Admin/adminOrdersPage';
-import UsersPage from './Admin/usersPage';
+import AdminOrdersPage from './Admin/AdminOrdersPage';
+import UsersPage from './Admin/UsersPage';
 
 export default function AdminPage () {
     const location = useLocation();
