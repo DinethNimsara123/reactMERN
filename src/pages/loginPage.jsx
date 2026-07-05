@@ -22,11 +22,7 @@ export default function LoginPage(){
             });
             console.log("Backend Google Login Response:", res.data);
             toast.success("Google Login Successful! 🎉");
-
-            // Token save කරනවා
             localStorage.setItem("Token", res.data.token);
-
-            // Role අනුව redirect කරනවා
             if (res.data.role === "Admin") {
                 navigate("/admin");
             } else {
@@ -56,11 +52,8 @@ export default function LoginPage(){
 
             console.log("Login Response:", res.data);
             toast.success("Login Successful!", { id: "loginToast" });
-            
-            // Token එක LocalStorage එකට දැමීම
             localStorage.setItem("Token", res.data.token);
 
-            // 🚀 ලොග් වුණු ගමන් කෙලින්ම Role එක අනුව හරියටම යැවීම
             if (res.data.role === "Admin" || res.data.isAdmin === true) {
                 navigate("/admin");
             } else {
@@ -77,7 +70,7 @@ export default function LoginPage(){
     }
 
     return(
-        <div className="w-full h-screen bg-[url('loginBg.jpg')] bg-cover bg-no-repeat flex justify-center items-center">
+        <div className="w-full h-screen bg-[url('/loginBg.jpg')] bg-cover bg-no-repeat flex justify-center items-center">
             <form onSubmit={handleLogin} className="w-[400px] h-[600px] backdrop-blur-md shadow-2xl shadow-black rounded-3xl flex-col p-8 flex justify-center">
                 <h1 className="text-white font-bold text-5xl text-center mb-10">Login</h1>
                 
@@ -93,7 +86,6 @@ export default function LoginPage(){
                     />
                 </div>
 
-                {/* Password Field with Eye Toggle */}
                 <div className="mb-4">
                     <label className="font-bold text-white flex items-center gap-2"> <MdOutlineKey /> Password </label>
                     <div className="relative">
@@ -114,7 +106,6 @@ export default function LoginPage(){
                     </div>
                 </div>
 
-                {/* 👉 Forgot Password လින්ක් එක /forget-password ලෙස නිවැරදිව යොමු කර ඇත */}
                 <p className="text-white font-light text-xs mt-2">Forget your password? click <Link to="/forget-password" className="underline text-blue-400 ml-1">Here</Link> </p>
                 
                 <div>
