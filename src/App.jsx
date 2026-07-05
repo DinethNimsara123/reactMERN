@@ -8,7 +8,7 @@ import AdminPage from './pages/adminPage'
 import TestPage from './pages/test'
 import { Toaster } from 'react-hot-toast'
 import CartPage from "./pages/CartPage";
-import MyOrders from "./components/MyOrders";
+import MyOrders from "./components/MyOrders.jsx";
 import AdminRoute from "./Components/AdminRouteCheck";
 import SettingsPage from "./pages/SettingsPage";
 import { GoogleOAuthProvider } from '@react-oauth/google';
