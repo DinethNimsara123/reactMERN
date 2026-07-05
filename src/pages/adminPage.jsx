@@ -2,12 +2,12 @@ import { Routes,Route,Link} from 'react-router-dom'
 import { FcNews } from "react-icons/fc"
 import { FcAddDatabase } from "react-icons/fc";
 import { FcManager } from "react-icons/fc";
-import AdminProductspage from './admin/adminProductspage';
-import AdminAddProduct from './admin/adminAddproduct';
+import AdminProductspage from './Admin/adminProductspage';
+import AdminAddProduct from './Admin/adminAddproduct';
 import { NavLink,useLocation} from 'react-router-dom';
 import AdminEditeProduct from './Admin/adminEditeProductForm';
-import AdminOrdersPage from './admin/adminOrdersPage';
-import UsersPage from './admin/usersPage';
+import AdminOrdersPage from './Admin/adminOrdersPage';
+import UsersPage from './Admin/usersPage';
 
 export default function AdminPage () {
     const location = useLocation();
