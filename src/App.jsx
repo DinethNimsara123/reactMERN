@@ -12,8 +12,8 @@ import MyOrders from "./Components/MyOrders";
 import AdminRoute from "./Components/AdminRouteCheck";
 import SettingsPage from "./pages/SettingsPage";
 import { GoogleOAuthProvider } from '@react-oauth/google';
-import AboutUs from './pages/AboutUs';
-import ContactUs from './pages/ContactUs';
+import AboutUs from './pages/aboutUs';
+import ContactUs from './pages/contactUs';
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
 
